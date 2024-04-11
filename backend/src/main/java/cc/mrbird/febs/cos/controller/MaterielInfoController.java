@@ -2,14 +2,19 @@ package cc.mrbird.febs.cos.controller;
 
 
 import cc.mrbird.febs.common.utils.R;
+import cc.mrbird.febs.cos.entity.DetectionInfo;
 import cc.mrbird.febs.cos.entity.MaterielInfo;
+import cc.mrbird.febs.cos.service.IDetectionInfoService;
 import cc.mrbird.febs.cos.service.IMaterielInfoService;
 import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.util.StrUtil;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -23,6 +28,8 @@ public class MaterielInfoController {
 
     private final IMaterielInfoService materielInfoService;
 
+    private final IDetectionInfoService datasetInfoService;
+
     /**
      * 分页获取物料信息
      *
@@ -33,6 +40,29 @@ public class MaterielInfoController {
     @GetMapping("/page")
     public R page(Page<MaterielInfo> page, MaterielInfo materielInfo) {
         return R.ok(materielInfoService.selectMaterielPage(page, materielInfo));
+    }
+
+    /**
+     * 根据物料ID获取检测项
+     *
+     * @param id 物料ID
+     * @return 结果
+     */
+    @GetMapping("/checkItem")
+    public R selectCheckItemById(Integer id) {
+        MaterielInfo materielInfo = materielInfoService.getById(id);
+        List<String> detectionIds = Arrays.asList(StrUtil.split(materielInfo.getDetectionIds(), ","));
+        return R.ok(datasetInfoService.list(Wrappers.<DetectionInfo>lambdaQuery().in(DetectionInfo::getId, detectionIds)));
+    }
+
+    /**
+     * 查询主页信息
+     *
+     * @return 结果
+     */
+    @GetMapping("/home/data")
+    public R homeData() {
+        return R.ok(materielInfoService.homeData());
     }
 
     /**

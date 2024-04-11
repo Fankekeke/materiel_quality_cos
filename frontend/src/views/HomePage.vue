@@ -1,26 +1,41 @@
 <template>
   <div :class="[multipage === true ? 'multi-page':'single-page', 'not-menu-page', 'home-page']">
-    <dv-border-box-11 title="欢迎各位领导莅临指导" style="height: 80vh">
-      <a-row style="padding: 50px;padding-top: 80px">
+    <a-row :gutter="8" class="head-info">
+      <a-card class="head-info-card">
         <a-col :span="12">
-          <div class="left-chart-1">
-            <div class="lc1-details" style="color: white">设备运行总数<span>430</span></div>
-            <dv-capsule-chart class="lc1-chart" :config="config" />
-            <dv-decoration-2 style="height:10px;" />
-          </div>
-        </a-col>
-        <a-col :span="12">
-          <div class="right-chart-1">
-            <div class="rc1-chart-container">
-              <div class="left" style="color: white">
-                <div>设备运行总数 262</div>
-              </div>
-              <dv-capsule-chart class="right" :config="config2" />
+          <div class="head-info-count">
+            <div class="head-info-welcome">
+              {{welcomeMessage}}
             </div>
+            <div class="head-info-desc">
+              <p>{{user.roleName ? user.roleName : '暂无角色'}}</p>
+            </div>
+            <div class="head-info-time">上次登录时间：{{user.lastLoginTime ? user.lastLoginTime : '第一次访问系统'}}</div>
           </div>
         </a-col>
-      </a-row>
-    </dv-border-box-11>
+        <a-col :span="12">
+          <div>
+            <a-row class="more-info">
+              <a-col :span="4"></a-col>
+              <a-col :span="4"></a-col>
+              <a-col :span="4">
+                <head-info title="员工数量" :content="titleData.staffNum" :center="false" :bordered="false"/>
+              </a-col>
+              <a-col :span="4">
+                <head-info title="客户数量" :content="titleData.clienteleNum" :center="false" :bordered="false"/>
+              </a-col>
+              <a-col :span="4">
+                <head-info title="工作站量" :content="titleData.stationNum" :center="false" :bordered="false"/>
+              </a-col>
+              <a-col :span="4">
+                <head-info title="物料数量" :content="titleData.materielNum" :center="false"/>
+              </a-col>
+            </a-row>
+          </div>
+        </a-col>
+      </a-card>
+    </a-row>
+    <home @setTitle="setTitleData"></home>
   </div>
 </template>
 <script>
@@ -36,62 +51,11 @@ export default {
   components: {Home, Work, HeadInfo},
   data () {
     return {
-      config: {
-        data: [
-          {
-            name: '收费系统',
-            value: 167
-          },
-          {
-            name: '通信系统',
-            value: 67
-          },
-          {
-            name: '监控系统',
-            value: 123
-          },
-          {
-            name: '供配电系统',
-            value: 55
-          },
-          {
-            name: '其他',
-            value: 98
-          }
-        ],
-        colors: ['#00baff', '#3de7c9', '#fff', '#ffc530', '#469f4b'],
-        unit: '件'
-      },
-      config2: {
-        data: [
-          {
-            name: '收费系统',
-            value: 25
-          },
-          {
-            name: '通信系统',
-            value: 66
-          },
-          {
-            name: '监控系统',
-            value: 123
-          },
-          {
-            name: '供配电系统',
-            value: 72
-          },
-          {
-            name: '其他',
-            value: 99
-          }
-        ],
-        unit: '件'
-      },
       titleData: {
         staffNum: 0,
-        totalRevenue: 0,
-        totalOrderNum: 0,
-        roomNum: 0
+        clienteleNum: 0,
+        stationNum: 0,
+        materielNum: 0
       },
       series: [],
       chartOptions: {

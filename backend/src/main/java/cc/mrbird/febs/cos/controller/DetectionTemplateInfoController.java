@@ -36,6 +36,17 @@ public class DetectionTemplateInfoController {
     }
 
     /**
+     * 根据类型获取物料
+     *
+     * @param type 类型（1.来料 2.过程 3.出货）
+     * @return 结果
+     */
+    @GetMapping("/materiel")
+    public R selectMaterielByTemplate(String type) {
+        return R.ok(detectionTemplateInfoService.selectMaterielByTemplate(type));
+    }
+
+    /**
      * 检测模板信息详情
      *
      * @param id 检测模板ID

@@ -3,10 +3,14 @@ package cc.mrbird.febs.cos.controller;
 
 import cc.mrbird.febs.common.exception.FebsException;
 import cc.mrbird.febs.common.utils.R;
+import cc.mrbird.febs.cos.entity.DetectionChcekInfo;
 import cc.mrbird.febs.cos.entity.IncomeCheckInfo;
+import cc.mrbird.febs.cos.service.IDetectionChcekInfoService;
 import cc.mrbird.febs.cos.service.IIncomeCheckInfoService;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.NumberUtil;
+import cn.hutool.core.util.StrUtil;
+import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +29,8 @@ import java.util.List;
 public class IncomeCheckInfoController {
 
     private final IIncomeCheckInfoService incomeCheckInfoService;
+
+    private final IDetectionChcekInfoService dictionaryChcekInfoService;
 
     /**
      * 分页获取来料检验信息
@@ -105,6 +111,15 @@ public class IncomeCheckInfoController {
         }
         incomeCheckInfo.setReceiptStatus("2");
         incomeCheckInfo.setCheckDate(DateUtil.formatDateTime(new Date()));
+
+        // 校验项
+        if (StrUtil.isNotEmpty(incomeCheckInfo.getDetectionCheck())) {
+            List<DetectionChcekInfo> detectionCheckList = JSONUtil.toList(incomeCheckInfo.getDetectionCheck(), DetectionChcekInfo.class);
+            for (DetectionChcekInfo detectionChcekInfo : detectionCheckList) {
+                detectionChcekInfo.setCode(checkInfo.getCode());
+            }
+            dictionaryChcekInfoService.saveBatch(detectionCheckList);
+        }
         return R.ok(incomeCheckInfoService.updateById(incomeCheckInfo));
     }
 

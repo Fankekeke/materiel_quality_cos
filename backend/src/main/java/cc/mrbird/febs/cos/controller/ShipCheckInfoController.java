@@ -3,11 +3,15 @@ package cc.mrbird.febs.cos.controller;
 
 import cc.mrbird.febs.common.exception.FebsException;
 import cc.mrbird.febs.common.utils.R;
+import cc.mrbird.febs.cos.entity.DetectionChcekInfo;
 import cc.mrbird.febs.cos.entity.ProcessCheckInfo;
 import cc.mrbird.febs.cos.entity.ShipCheckInfo;
+import cc.mrbird.febs.cos.service.IDetectionChcekInfoService;
 import cc.mrbird.febs.cos.service.IShipCheckInfoService;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.NumberUtil;
+import cn.hutool.core.util.StrUtil;
+import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +30,8 @@ import java.util.List;
 public class ShipCheckInfoController {
 
     private final IShipCheckInfoService shipCheckInfoService;
+
+    private final IDetectionChcekInfoService dictionaryChcekInfoService;
 
     /**
      * 分页获取出货检验信息
@@ -94,6 +100,15 @@ public class ShipCheckInfoController {
         }
         shipCheckInfo.setReceiptStatus("2");
         shipCheckInfo.setCheckDate(DateUtil.formatDateTime(new Date()));
+
+        // 校验项
+        if (StrUtil.isNotEmpty(shipCheckInfo.getDetectionCheck())) {
+            List<DetectionChcekInfo> detectionCheckList = JSONUtil.toList(shipCheckInfo.getDetectionCheck(), DetectionChcekInfo.class);
+            for (DetectionChcekInfo detectionChcekInfo : detectionCheckList) {
+                detectionChcekInfo.setCode(checkInfo.getCode());
+            }
+            dictionaryChcekInfoService.saveBatch(detectionCheckList);
+        }
         return R.ok(shipCheckInfoService.updateById(shipCheckInfo));
     }
 

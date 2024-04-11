@@ -105,6 +105,38 @@
         </a-col>
       </a-row>
       <br/>
+      <br/>
+      <a-row style="padding-left: 24px;padding-right: 24px;">
+        <a-col style="margin-bottom: 15px"><span style="font-size: 15px;font-weight: 650;color: #000c17">检测项</span></a-col>
+        <a-col :span="24">
+          <a-table :columns="columns" :data-source="checkItem">
+            <template slot="typeNameField" slot-scope="text, record">
+              <a-input v-model="record.typeName"/>
+            </template>
+            <template slot="checkUtilField" slot-scope="text, record">
+              <a-input v-model="record.checkUtil"/>
+            </template>
+            <template slot="checkRequireField" slot-scope="text, record">
+              <a-input v-model="record.checkRequire"/>
+            </template>
+            <template slot="standardValueField" slot-scope="text, record">
+              <a-input v-model="record.standardValue"/>
+            </template>
+            <template slot="unitField" slot-scope="text, record">
+              <a-input v-model="record.unit"/>
+            </template>
+            <template slot="errorMaxField" slot-scope="text, record">
+              <a-input-number :min="0" :max="99999" v-model="record.errorMax"/>
+            </template>
+            <template slot="errorMinField" slot-scope="text, record">
+              <a-input-number :min="-9999" :max="99999" v-model="record.errorMin"/>
+            </template>
+            <template slot="contentField" slot-scope="text, record">
+              <a-input v-model="record.content"/>
+            </template>
+          </a-table>
+        </a-col>
+      </a-row>
     </div>
     <br/>
   </a-modal>
@@ -140,6 +172,33 @@ export default {
       },
       set: function () {
       }
+    },
+    columns () {
+      return [{
+        title: '检测项类型',
+        dataIndex: 'typeName'
+      }, {
+        title: '检测工具',
+        dataIndex: 'checkUtil'
+      }, {
+        title: '检测要求',
+        dataIndex: 'checkRequire'
+      }, {
+        title: '标准值',
+        dataIndex: 'standardValue'
+      }, {
+        title: '单位',
+        dataIndex: 'unit'
+      }, {
+        title: '误差上限',
+        dataIndex: 'errorMax'
+      }, {
+        title: '误差下限',
+        dataIndex: 'errorMin'
+      }, {
+        title: '备注',
+        dataIndex: 'content'
+      }]
     }
   },
   data () {
@@ -151,7 +210,7 @@ export default {
       repairInfo: null,
       reserveInfo: null,
       durgList: [],
-      logisticsList: [],
+      checkItem: [],
       userInfo: null,
       processInfo: null,
       shopInfo: null,
@@ -160,9 +219,10 @@ export default {
     }
   },
   watch: {
-    processShow: function (value) {
+    show: function (value) {
       if (value) {
-        this.imagesInit(this.processData.images)
+        // this.imagesInit(this.processData.images)
+        this.dataInit(this.processData.code)
       }
     }
   },
@@ -177,12 +237,9 @@ export default {
       // let driving = new BMap.DrivingRoute(baiduMap.rMap(), {renderOptions:{map: baiduMap.rMap(), autoViewport: true}});
       // driving.search(new BMap.Point(this.nowPoint.lng,this.nowPoint.lat), new BMap.Point(scenic.point.split(",")[0],scenic.point.split(",")[1]));
     },
-    dataInit (processNo) {
-      this.$get(`/cos/process-info/detail/${processNo}`).then((r) => {
-        this.processInfo = r.data.process
-        this.shopInfo = r.data.shop
-        this.brandInfo = r.data.brand
-        this.typeInfo = r.data.type
+    dataInit (code) {
+      this.$get(`/cos/detection-chcek-info/byCode`, {code}).then((r) => {
+        this.checkItem = r.data.data
       })
     },
     imagesInit (images) {

@@ -199,6 +199,18 @@ export default {
               return <a-tag>PVC展板</a-tag>
             case '3':
               return <a-tag>灯片</a-tag>
+            case '4':
+              return <a-tag>原材料</a-tag>
+            case '5':
+              return <a-tag>外协件物料</a-tag>
+            case '6':
+              return <a-tag>自制件物料</a-tag>
+            case '7':
+              return <a-tag>商品</a-tag>
+            case '8':
+              return <a-tag>资产类物料</a-tag>
+            case '9':
+              return <a-tag>服务类物料</a-tag>
             default:
               return '- -'
           }

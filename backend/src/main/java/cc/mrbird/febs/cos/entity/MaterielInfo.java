@@ -67,5 +67,13 @@ public class MaterielInfo implements Serializable {
      */
     private String images;
 
+    /**
+     * 检测模板
+     */
+    private String templateId;
 
+    /**
+     * 检测项
+     */
+    private String detectionIds;
 }

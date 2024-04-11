@@ -164,4 +164,6 @@ public class ProcessCheckInfo implements Serializable {
      */
     private String content;
 
+    @TableField(exist = false)
+    private String detectionCheck;
 }

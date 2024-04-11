@@ -269,7 +269,7 @@ export default {
       }
     },
     selectMaterielList () {
-      this.$get(`/cos/materiel-info/list`).then((r) => {
+      this.$get(`/cos/detection-template-info/materiel`, {type: '2'}).then((r) => {
         this.materielList = r.data.data
       })
     },

@@ -2,12 +2,12 @@
   <div>
     <a-row style="margin-top: 15px">
       <a-col :span="24">
-        <div style="background: #ECECEC; padding: 30px;" v-if="user.roleId == 74 || user.roleId == 76">
+        <div style="background: #ECECEC; padding: 30px;">
           <a-row :gutter="16">
             <a-col :span="6">
               <a-card hoverable>
                 <a-row>
-                  <a-col :span="24" style="font-size: 13px;margin-bottom: 8px;font-family: SimHei">本月收益/元</a-col>
+                  <a-col :span="24" style="font-size: 13px;margin-bottom: 8px;font-family: SimHei">本月检测数量/单</a-col>
                   <a-col :span="4"><a-icon type="arrow-up" style="font-size: 30px;margin-top: 3px"/></a-col>
                   <a-col :span="18" style="font-size: 28px;font-weight: 500;font-family: SimHei">
                     {{ titleData.incomeMonth }}
@@ -19,7 +19,7 @@
             <a-col :span="6">
               <a-card hoverable>
                 <a-row>
-                  <a-col :span="24" style="font-size: 13px;margin-bottom: 8px;font-family: SimHei">本月工单</a-col>
+                  <a-col :span="24" style="font-size: 13px;margin-bottom: 8px;font-family: SimHei">本月通过单数</a-col>
                   <a-col :span="4"><a-icon type="arrow-up" style="font-size: 30px;margin-top: 3px"/></a-col>
                   <a-col :span="18" style="font-size: 28px;font-weight: 500;font-family: SimHei">
                     {{ titleData.workOrderMonth }}
@@ -31,7 +31,7 @@
             <a-col :span="6">
               <a-card hoverable>
                 <a-row>
-                  <a-col :span="24" style="font-size: 13px;margin-bottom: 8px;font-family: SimHei">本年收益/元</a-col>
+                  <a-col :span="24" style="font-size: 13px;margin-bottom: 8px;font-family: SimHei">本年检测数量/单</a-col>
                   <a-col :span="4"><a-icon type="arrow-up" style="font-size: 30px;margin-top: 3px"/></a-col>
                   <a-col :span="18" style="font-size: 28px;font-weight: 500;font-family: SimHei">
                     {{ titleData.incomeYear }}
@@ -43,7 +43,7 @@
             <a-col :span="6">
               <a-card hoverable>
                 <a-row>
-                  <a-col :span="24" style="font-size: 13px;margin-bottom: 8px;font-family: SimHei">本年工单</a-col>
+                  <a-col :span="24" style="font-size: 13px;margin-bottom: 8px;font-family: SimHei">本年通过单数</a-col>
                   <a-col :span="4"><a-icon type="arrow-up" style="font-size: 30px;margin-top: 3px"/></a-col>
                   <a-col :span="18" style="font-size: 28px;font-weight: 500;font-family: SimHei">
                     {{ titleData.workOrderYear }}
@@ -56,21 +56,21 @@
         </div>
       </a-col>
     </a-row>
-    <a-row style="margin-top: 15px" v-if="user.roleId == 74 || user.roleId == 76">
+    <a-row style="margin-top: 15px" :gutter="16">
       <a-col :span="12">
         <a-card hoverable :bordered="false" style="width: 100%">
           <a-skeleton active v-if="loading" />
-          <apexchart  v-if="!loading" type="line" height="300" :options="chartOptions" :series="series"></apexchart>
+          <apexchart  v-if="!loading" type="area"  height="300" :options="chartOptions" :series="series"></apexchart>
         </a-card>
       </a-col>
       <a-col :span="12">
         <a-card hoverable :bordered="false" style="width: 100%">
           <a-skeleton active v-if="loading" />
-          <apexchart v-if="!loading" type="bar" height="300" :options="chartOptions1" :series="series1"></apexchart>
+          <apexchart v-if="!loading" type="area"  height="300" :options="chartOptions1" :series="series1"></apexchart>
         </a-card>
       </a-col>
     </a-row>
-    <a-row style="margin-top: 15px" v-if="user.roleId == 74 || user.roleId == 76">
+    <a-row style="margin-top: 15px">
 <!--      <a-col :span="9">-->
 <!--        <a-card hoverable :bordered="false" style="width: 100%">-->
 <!--          <a-skeleton active v-if="loading" />-->
@@ -84,27 +84,27 @@
 <!--        </a-card>-->
 <!--      </a-col>-->
     </a-row>
-    <a-row style="margin-top: 15px">
-      <a-col :span="12">
-        <a-card hoverable :loading="loading" :bordered="false" title="公告信息" style="margin-top: 15px">
-          <div style="padding: 0 22px">
-            <a-list item-layout="vertical" :pagination="pagination" :data-source="bulletinList">
-              <a-list-item slot="renderItem" key="item.title" slot-scope="item, index">
-                <template slot="actions">
-              <span key="message">
-                <a-icon type="message" style="margin-right: 8px" />
-                {{ item.date }}
-              </span>
-                </template>
-                <a-list-item-meta :description="item.content" style="font-size: 14px">
-                  <a slot="title">{{ item.title }}</a>
-                </a-list-item-meta>
-              </a-list-item>
-            </a-list>
-          </div>
-        </a-card>
-      </a-col>
-    </a-row>
+<!--    <a-row style="margin-top: 15px">-->
+<!--      <a-col :span="12">-->
+<!--        <a-card hoverable :loading="loading" :bordered="false" title="公告信息" style="margin-top: 15px">-->
+<!--          <div style="padding: 0 22px">-->
+<!--            <a-list item-layout="vertical" :pagination="pagination" :data-source="bulletinList">-->
+<!--              <a-list-item slot="renderItem" key="item.title" slot-scope="item, index">-->
+<!--                <template slot="actions">-->
+<!--              <span key="message">-->
+<!--                <a-icon type="message" style="margin-right: 8px" />-->
+<!--                {{ item.date }}-->
+<!--              </span>-->
+<!--                </template>-->
+<!--                <a-list-item-meta :description="item.content" style="font-size: 14px">-->
+<!--                  <a slot="title">{{ item.title }}</a>-->
+<!--                </a-list-item-meta>-->
+<!--              </a-list-item>-->
+<!--            </a-list>-->
+<!--          </div>-->
+<!--        </a-card>-->
+<!--      </a-col>-->
+<!--    </a-row>-->
   </div>
 </template>
 
@@ -140,7 +140,7 @@ export default {
       }],
       chartOptions: {
         chart: {
-          type: 'line',
+          type: 'area',
           height: 300
         },
         xaxis: {
@@ -153,7 +153,7 @@ export default {
           enabled: false
         },
         title: {
-          text: '近十天收入统计',
+          text: '近十天检测统计',
           align: 'left'
         },
         markers: {
@@ -165,11 +165,11 @@ export default {
       series1: [],
       chartOptions1: {
         chart: {
-          type: 'bar',
+          type: 'area',
           height: 300
         },
         title: {
-          text: '近十天工单统计',
+          text: '近十天通过统计',
           align: 'left'
         },
         plotOptions: {
@@ -277,29 +277,54 @@ export default {
   },
   methods: {
     selectHomeData () {
-      this.$get('/cos/park-order-info/home/data', {roleId: this.user.roleId, userId: this.user.userId}).then((r) => {
-        let titleData = { staffNum: r.data.staffNum, totalRevenue: r.data.totalRevenue, totalOrderNum: r.data.totalOrderNum, roomNum: r.data.roomNum }
+      this.$get('/cos/materiel-info/home/data').then((r) => {
+        let titleData = { staffNum: r.data.staffNum, clienteleNum: r.data.clienteleNum, stationNum: r.data.stationNum, materielNum: r.data.materielNum }
         this.$emit('setTitle', titleData)
         this.titleData.incomeMonth = r.data.incomeMonth
         this.titleData.workOrderMonth = r.data.workOrderMonth
         this.titleData.incomeYear = r.data.incomeYear
         this.titleData.workOrderYear = r.data.workOrderYear
-        this.bulletinList = r.data.bulletin
-        let values = []
-        if (r.data.orderRecord !== null && r.data.orderRecord.length !== 0) {
-          if (this.chartOptions1.xaxis.categories.length === 0) {
-            this.chartOptions1.xaxis.categories = r.data.orderRecord.map(obj => { return obj.days })
-          }
-          let itemData = { name: '订单数', data: r.data.orderRecord.map(obj => { return obj.count }) }
-          values.push(itemData)
-          this.series1 = values
-        }
-        this.series[0].data = r.data.paymentRecord.map(obj => { return obj.amount })
-        this.chartOptions.xaxis.categories = r.data.paymentRecord.map(obj => { return obj.days })
-        if (r.data.orderRate.length !== 0) {
-          this.series2 = r.data.orderRate.map(obj => { return obj.count })
-          this.chartOptions2.labels = r.data.orderRate.map(obj => { return obj.name })
-        }
+        let series = []
+        let values1 = []
+        let values2 = []
+        let values3 = []
+        r.data.paymentRecord1.forEach(obj => {
+          values1.push({x: obj.days, y: obj.amount})
+        })
+        let itemData1 = { name: '来料检测', data: values1 }
+        r.data.paymentRecord2.forEach(obj => {
+          values2.push({x: obj.days, y: obj.amount})
+        })
+        let itemData2 = { name: '过程检测', data: values2 }
+        r.data.paymentRecord3.forEach(obj => {
+          values3.push({x: obj.days, y: obj.amount})
+        })
+        let itemData3 = { name: '出货检测', data: values3 }
+        series.push(itemData1)
+        series.push(itemData2)
+        series.push(itemData3)
+        this.series = series
+
+        let series1 = []
+        let values4 = []
+        let values5 = []
+        let values6 = []
+        r.data.orderRecord1.forEach(obj => {
+          values4.push({x: obj.days, y: obj.amount})
+        })
+        let itemData4 = { name: '来料检测', data: values4 }
+        r.data.orderRecord2.forEach(obj => {
+          values5.push({x: obj.days, y: obj.amount})
+        })
+        let itemData5 = { name: '过程检测', data: values5 }
+        r.data.orderRecord3.forEach(obj => {
+          values6.push({x: obj.days, y: obj.amount})
+        })
+        let itemData6 = { name: '出货检测', data: values6 }
+        series1.push(itemData4)
+        series1.push(itemData5)
+        series1.push(itemData6)
+        this.series1 = series1
       })
     }
   }

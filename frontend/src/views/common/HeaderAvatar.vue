@@ -2,8 +2,6 @@
   <div>
     <a-dropdown style="display: inline-block; height: 100%; vertical-align: initial">
       <span style="cursor: pointer">
-        <a-avatar class="avatar" size="small" shape="circle"
-                  :src="avatar"/>
         <span class="curr-user">{{user.username}}</span>
       </span>
       <a-menu style="width: 150px" slot="overlay">

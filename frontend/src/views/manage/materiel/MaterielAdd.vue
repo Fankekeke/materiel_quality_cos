@@ -54,6 +54,32 @@
               <a-select-option value="1">发动机</a-select-option>
               <a-select-option value="2">PVC展板</a-select-option>
               <a-select-option value="3">灯片</a-select-option>
+              <a-select-option value="4">原材料</a-select-option>
+              <a-select-option value="5">外协件物料</a-select-option>
+              <a-select-option value="6">自制件物料</a-select-option>
+              <a-select-option value="7">商品</a-select-option>
+              <a-select-option value="8">资产类物料</a-select-option>
+              <a-select-option value="9">服务类物料</a-select-option>
+            </a-select>
+          </a-form-item>
+        </a-col>
+        <a-col :span="12">
+          <a-form-item label='检测模板' v-bind="formItemLayout">
+            <a-select v-decorator="[
+              'templateId',
+              { rules: [{ required: true, message: '请输入检测模板!' }] }
+              ]">
+              <a-select-option :value="item.id" v-for="(item, index) in templateList" :key="index">{{ item.name }}</a-select-option>
+            </a-select>
+          </a-form-item>
+        </a-col>
+        <a-col :span="24">
+          <a-form-item label='检测项' v-bind="formItemLayout">
+            <a-select mode="multiple" v-decorator="[
+              'detectionIds',
+              { rules: [{ required: true, message: '请输入检测项!' }] }
+              ]">
+              <a-select-option :value="item.id" v-for="(item, index) in detectionList" :key="index">{{ item.name }}</a-select-option>
             </a-select>
           </a-form-item>
         </a-col>
@@ -130,10 +156,25 @@ export default {
       pharmacyList: [],
       shopList: [],
       materielTypeList: [],
-      brandList: []
+      templateList: [],
+      detectionList: []
     }
   },
+  mounted () {
+    this.selectTemplateList()
+    this.selectDetectionList()
+  },
   methods: {
+    selectTemplateList () {
+      this.$get(`/cos/detection-template-info/list`).then((r) => {
+        this.templateList = r.data.data
+      })
+    },
+    selectDetectionList () {
+      this.$get(`/cos/detection-info/list`).then((r) => {
+        this.detectionList = r.data.data
+      })
+    },
     handleCancel () {
       this.previewVisible = false
     },

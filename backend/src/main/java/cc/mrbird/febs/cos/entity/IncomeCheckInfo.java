@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.io.Serializable;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -148,5 +149,6 @@ public class IncomeCheckInfo implements Serializable {
      */
     private String content;
 
-
+    @TableField(exist = false)
+    private String detectionCheck;
 }

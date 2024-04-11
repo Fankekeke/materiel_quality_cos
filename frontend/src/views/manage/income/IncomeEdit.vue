@@ -156,6 +156,37 @@
             ]"/>
           </a-form-item>
         </a-col>
+        <a-divider orientation="left">
+          <span style="font-size: 13px;font-family: SimHei">检验项</span>
+        </a-divider>
+        <a-col :span="24">
+          <a-table :columns="columns" :data-source="checkItem">
+            <template slot="typeNameField" slot-scope="text, record">
+              <a-input v-model="record.typeName"/>
+            </template>
+            <template slot="checkUtilField" slot-scope="text, record">
+              <a-input v-model="record.checkUtil"/>
+            </template>
+            <template slot="checkRequireField" slot-scope="text, record">
+              <a-input v-model="record.checkRequire"/>
+            </template>
+            <template slot="standardValueField" slot-scope="text, record">
+              <a-input v-model="record.standardValue"/>
+            </template>
+            <template slot="unitField" slot-scope="text, record">
+              <a-input v-model="record.unit"/>
+            </template>
+            <template slot="errorMaxField" slot-scope="text, record">
+              <a-input-number :min="0" :max="99999" v-model="record.errorMax"/>
+            </template>
+            <template slot="errorMinField" slot-scope="text, record">
+              <a-input-number :min="-9999" :max="99999" v-model="record.errorMin"/>
+            </template>
+            <template slot="contentField" slot-scope="text, record">
+              <a-input v-model="record.content"/>
+            </template>
+          </a-table>
+        </a-col>
       </a-row>
     </a-form>
   </a-modal>
@@ -194,6 +225,41 @@ export default {
       },
       set: function () {
       }
+    },
+    columns () {
+      return [{
+        title: '检测项类型',
+        dataIndex: 'typeName',
+        scopedSlots: {customRender: 'typeNameField'}
+      }, {
+        title: '检测工具',
+        dataIndex: 'checkUtil',
+        scopedSlots: {customRender: 'checkUtilField'}
+      }, {
+        title: '检测要求',
+        dataIndex: 'checkRequire',
+        scopedSlots: {customRender: 'checkRequireField'}
+      }, {
+        title: '标准值',
+        dataIndex: 'standardValue',
+        scopedSlots: {customRender: 'standardValueField'}
+      }, {
+        title: '单位',
+        dataIndex: 'unit',
+        scopedSlots: {customRender: 'unitField'}
+      }, {
+        title: '误差上限',
+        dataIndex: 'errorMax',
+        scopedSlots: {customRender: 'errorMaxField'}
+      }, {
+        title: '误差下限',
+        dataIndex: 'errorMin',
+        scopedSlots: {customRender: 'errorMinField'}
+      }, {
+        title: '备注',
+        dataIndex: 'content',
+        scopedSlots: {customRender: 'contentField'}
+      }]
     }
   },
   data () {
@@ -210,13 +276,37 @@ export default {
       shopList: [],
       incomeTypeList: [],
       staffList: [],
-      brandList: []
+      brandList: [],
+      checkItem: []
     }
   },
   mounted () {
     this.selectStaffList()
   },
   methods: {
+    selectCheckItem (materielId) {
+      this.$get(`/cos/materiel-info/checkItem`, {id: materielId}).then((r) => {
+        r.data.data.forEach(item => {
+          // 1.尺寸 2.外观 3.重量 4.性能 5.成分
+          if (item.detectionItem === '1') {
+            item.typeName = '尺寸'
+          } else if (item.detectionItem === '2') {
+            item.typeName = '外观'
+          } else if (item.detectionItem === '3') {
+            item.typeName = '重量'
+          } else if (item.detectionItem === '4') {
+            item.typeName = '性能'
+          } else if (item.detectionItem === '5') {
+            item.typeName = '成分'
+          }
+          item.content = ''
+          item.checkRequire = '/'
+          item.standardValue = '100'
+          item.unit = '个'
+        })
+        this.checkItem = r.data.data
+      })
+    },
     selectStaffList () {
       this.$get(`/cos/staff-info/list`).then((r) => {
         this.staffList = r.data.data
@@ -262,6 +352,7 @@ export default {
     setFormValues ({...income}) {
       this.incomeData = income
       this.rowId = income.id
+      this.selectCheckItem(income.materielId)
       // let fields = ['name', 'phone', 'remark', 'score', 'incomeLevel', 'abbreviation']
       // let obj = {}
       // Object.keys(income).forEach((key) => {
@@ -301,6 +392,7 @@ export default {
           if (values.checkDate) {
             values.checkDate = moment(values.checkDate).format('YYYY-MM-DD')
           }
+          values.detectionCheck = JSON.stringify(this.checkItem)
           this.loading = true
           this.$post('/cos/income-check-info/additional', {
             ...values

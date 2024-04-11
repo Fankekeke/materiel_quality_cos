@@ -3,11 +3,15 @@ package cc.mrbird.febs.cos.controller;
 
 import cc.mrbird.febs.common.exception.FebsException;
 import cc.mrbird.febs.common.utils.R;
+import cc.mrbird.febs.cos.entity.DetectionChcekInfo;
 import cc.mrbird.febs.cos.entity.IncomeCheckInfo;
 import cc.mrbird.febs.cos.entity.ProcessCheckInfo;
+import cc.mrbird.febs.cos.service.IDetectionChcekInfoService;
 import cc.mrbird.febs.cos.service.IProcessCheckInfoService;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.NumberUtil;
+import cn.hutool.core.util.StrUtil;
+import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +30,8 @@ import java.util.List;
 public class ProcessCheckInfoController {
 
     private final IProcessCheckInfoService processCheckInfoService;
+
+    private final IDetectionChcekInfoService dictionaryChcekInfoService;
 
     /**
      * 分页获取过程检验信息
@@ -84,6 +90,15 @@ public class ProcessCheckInfoController {
         }
         processCheckInfo.setReceiptStatus("2");
         processCheckInfo.setCheckDate(DateUtil.formatDateTime(new Date()));
+
+        // 校验项
+        if (StrUtil.isNotEmpty(processCheckInfo.getDetectionCheck())) {
+            List<DetectionChcekInfo> detectionCheckList = JSONUtil.toList(processCheckInfo.getDetectionCheck(), DetectionChcekInfo.class);
+            for (DetectionChcekInfo detectionChcekInfo : detectionCheckList) {
+                detectionChcekInfo.setCode(checkInfo.getCode());
+            }
+            dictionaryChcekInfoService.saveBatch(detectionCheckList);
+        }
         return R.ok(processCheckInfoService.updateById(processCheckInfo));
     }
 

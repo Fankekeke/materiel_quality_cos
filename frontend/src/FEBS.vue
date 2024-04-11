@@ -69,7 +69,7 @@ export default {
   }
 
   .not-menu-page {
-    background: black;
+    background: #e8e8e8;
     padding: 16px 32px;
     border-left: 1px solid #e8e8e8;
     border-right: 1px solid #e8e8e8;

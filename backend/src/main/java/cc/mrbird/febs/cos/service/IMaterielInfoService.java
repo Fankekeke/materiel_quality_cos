@@ -21,4 +21,11 @@ public interface IMaterielInfoService extends IService<MaterielInfo> {
      * @return 结果
      */
     IPage<LinkedHashMap<String, Object>> selectMaterielPage(Page<MaterielInfo> page, MaterielInfo materielInfo);
+
+    /**
+     * 查询主页信息
+     *
+     * @return 结果
+     */
+    LinkedHashMap<String, Object> homeData();
 }
