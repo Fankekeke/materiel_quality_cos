@@ -56,6 +56,7 @@
         </div>
       </a-col>
     </a-row>
+    <a @click="orderMapOpen">统计看板</a>
     <a-row style="margin-top: 15px" :gutter="16">
       <a-col :span="12">
         <a-card hoverable :bordered="false" style="width: 100%">
@@ -70,6 +71,10 @@
         </a-card>
       </a-col>
     </a-row>
+    <board
+      @close="handleorderMapViewClose"
+      :orderShow="orderMapView.visiable">
+    </board>
     <a-row style="margin-top: 15px">
 <!--      <a-col :span="9">-->
 <!--        <a-card hoverable :bordered="false" style="width: 100%">-->
@@ -109,6 +114,7 @@
 </template>
 
 <script>
+import board from '../../board/Board.vue'
 import {mapState} from 'vuex'
 export default {
   name: 'Home',
@@ -118,8 +124,13 @@ export default {
       user: state => state.account.user
     })
   },
+  components: {board},
   data () {
     return {
+      orderMapView: {
+        visiable: false,
+        data: null
+      },
       pagination: {
         onChange: page => {
           console.log(page)
@@ -276,6 +287,12 @@ export default {
     }, 200)
   },
   methods: {
+    orderMapOpen () {
+      this.orderMapView.visiable = true
+    },
+    handleorderMapViewClose () {
+      this.orderMapView.visiable = false
+    },
     selectHomeData () {
       this.$get('/cos/materiel-info/home/data').then((r) => {
         let titleData = { staffNum: r.data.staffNum, clienteleNum: r.data.clienteleNum, stationNum: r.data.stationNum, materielNum: r.data.materielNum }

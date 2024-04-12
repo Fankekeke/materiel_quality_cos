@@ -44,7 +44,7 @@
           {{ processData.stationName }}
         </a-col>
         <a-col :span="8"><b>检测数量：</b>
-          {{ processData.checkNum }}
+          {{ processData.checkQuantity }}
         </a-col>
         <a-col :span="8"><b>产品编码：</b>
           {{ processData.materielCode }}

@@ -66,6 +66,16 @@ public class MaterielInfoController {
     }
 
     /**
+     * 查询看板数据
+     *
+     * @return 结果
+     */
+    @GetMapping("/selectBoard")
+    public R selectBoard() {
+        return R.ok(materielInfoService.selectBoard());
+    }
+
+    /**
      * 物料信息详情
      *
      * @param id 物料ID

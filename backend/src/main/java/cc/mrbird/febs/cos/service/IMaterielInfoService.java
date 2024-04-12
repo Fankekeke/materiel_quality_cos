@@ -28,4 +28,11 @@ public interface IMaterielInfoService extends IService<MaterielInfo> {
      * @return 结果
      */
     LinkedHashMap<String, Object> homeData();
+
+    /**
+     * 查询看板数据
+     *
+     * @return 结果
+     */
+    LinkedHashMap<String, Object> selectBoard();
 }
